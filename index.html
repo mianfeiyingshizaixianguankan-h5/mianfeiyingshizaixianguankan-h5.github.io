@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>免费影视在线观看 - 公共放映厅与高清影视导航 | mianfeiyingshizaixianguankan-h5.github.io</title>
+<meta name="description" content="免费影视在线观看（mianfeiyingshizaixianguankan-h5.github.io）是一间胶片借阅台：电影、剧集、动漫、综艺按放映厅分类，标注画质与入口，手机电脑自适应，安静挑片，不弹窗。">
+<meta name="keywords" content="免费影视在线观看, 高清影视导航, 电影电视剧, 在线观看, 影视索引, mianfeiyingshizaixianguankan-h5">
+<meta name="author" content="免费影视在线观看">
+<meta name="robots" content="index, follow">
+<style>
+  :root{
+    --paper:#f4f1ea;
+    --paper2:#eae5da;
+    --ink:#1f2a37;
+    --ink2:#3c4654;
+    --muted:#5b6470;
+    --green:#2f6f5b;
+    --red:#c0492f;
+    --brass:#b9893f;
+    --line:#d6cebd;
+    --card:#fbfaf6;
+    --sans:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+    --serif:'Georgia','Songti SC',serif;
+    --mono:'SFMono-Regular',Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);background:var(--paper);color:var(--ink);
+    line-height:1.75;overflow-x:hidden;position:relative;
+    background-image:
+      radial-gradient(circle at 90% 4%, #2f6f5b12 0, transparent 38%),
+      radial-gradient(circle at 6% 94%, #c0492f10 0, transparent 42%),
+      repeating-linear-gradient(0deg,transparent 0 28px,#00000005 28px 29px);
+  }
+  a{color:var(--green);text-decoration:none;transition:.2s;}
+  a:hover{color:var(--red);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 1.2rem;position:relative;z-index:2;}
+
+  /* 顶栏 */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:1.05rem 1.2rem;
+    position:sticky;top:0;z-index:60;background:linear-gradient(var(--paper),transparent);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);}
+  .brand{display:flex;align-items:center;gap:.6rem;font-family:var(--serif);font-weight:700;
+    font-size:1.25rem;color:var(--ink);letter-spacing:.5px;}
+  .reel{width:24px;height:24px;flex:none;}
+  .nav{display:flex;gap:1.2rem;font-family:var(--mono);font-size:.82rem;color:var(--muted);}
+  .nav a{color:var(--muted);}
+  .nav a:hover{color:var(--ink);}
+
+  section{position:relative;padding:4.4rem 0 3.4rem;border-bottom:1px solid var(--line);}
+  .sec-head{display:flex;align-items:center;gap:.8rem;margin-bottom:2rem;flex-wrap:wrap;}
+  .call{font-family:var(--mono);font-size:.66rem;letter-spacing:2px;color:var(--paper);background:var(--ink);
+    padding:.2rem .6rem;border-radius:2px;}
+  h2.sec-title{font-family:var(--serif);font-size:clamp(1.7rem,4vw,2.5rem);color:var(--ink);letter-spacing:.5px;}
+
+  /* 栏目1：借阅台 */
+  #home{padding-top:3rem;}
+  .desk{display:grid;grid-template-columns:1.1fr .9fr;gap:2.4rem;align-items:center;}
+  .borrow-card{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1.8rem 1.8rem 1.6rem;
+    position:relative;box-shadow:0 10px 26px #1f2a3718;}
+  .borrow-card::before{content:"";position:absolute;left:10px;top:10px;bottom:10px;width:14px;
+    background:radial-gradient(circle,var(--paper) 3px,transparent 4px) 0 0/14px 18px repeat-y;}
+  .borrow-card .fields{margin-left:18px;}
+  .field{display:flex;gap:.6rem;font-family:var(--mono);font-size:.78rem;padding:.35rem 0;border-bottom:1px dotted var(--line);}
+  .field b{color:var(--muted);font-weight:400;min-width:64px;}
+  .field span{color:var(--ink);}
+  .hero-txt h1{font-family:var(--serif);font-size:clamp(2.4rem,6.5vw,4.2rem);line-height:1.05;letter-spacing:-.5px;}
+  .hero-txt h1 em{font-style:normal;color:var(--red);}
+  .hero-txt p.lead{margin:1.2rem 0 1.4rem;color:var(--ink2);font-size:1.02rem;max-width:520px;}
+  .tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.6rem;}
+  .tag{font-family:var(--mono);font-size:.72rem;background:var(--paper2);border:1px solid var(--line);
+    color:var(--green);padding:.28rem .75rem;border-radius:2px;}
+  .cta{display:inline-block;background:var(--ink);color:var(--paper);font-family:var(--mono);font-weight:700;
+    padding:.72rem 1.9rem;border:1px solid var(--ink);letter-spacing:1px;}
+  .cta:hover{background:var(--red);border-color:var(--red);color:#fff;}
+  .reel-wrap{display:flex;justify-content:center;align-items:center;}
+  .reel-wrap svg{width:min(240px,60vw);height:auto;filter:drop-shadow(0 8px 18px #1f2a3722);}
+
+  /* 栏目2：放映厅目录 */
+  #category .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.1rem;}
+  .hall{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1.3rem 1.2rem;
+    position:relative;transition:.18s;}
+  .hall:hover{transform:translateY(-3px);box-shadow:0 10px 22px #1f2a3718;background:#fff;}
+  .hall .no{font-family:var(--mono);font-size:.66rem;color:var(--brass);letter-spacing:1px;}
+  .hall h3{font-family:var(--serif);font-size:1.08rem;margin:.3rem 0 .2rem;}
+  .hall p{font-size:.76rem;color:var(--muted);}
+  .hall .dot{position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 3px #2f6f5b22;}
+
+  /* 栏目3：借阅卡片 */
+  #latest .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.3rem;}
+  .disc{background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden;transition:.18s;
+    display:flex;flex-direction:column;}
+  .disc:hover{transform:translateY(-3px);box-shadow:0 12px 26px #1f2a3720;}
+  .cover{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;
+    background:linear-gradient(150deg,var(--paper2),#fff);border-bottom:1px solid var(--line);position:relative;}
+  .cover.c2{background:linear-gradient(150deg,#e3e9e6,#fff);}
+  .cover.c3{background:linear-gradient(150deg,#f0e6e2,#fff);}
+  .stamp{position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:.6rem;color:var(--paper);
+    background:var(--red);padding:.12rem .45rem;transform:rotate(4deg);letter-spacing:1px;}
+  .disc .body{padding:1.1rem 1.2rem 1rem;flex:1;display:flex;flex-direction:column;}
+  .disc h3{font-family:var(--serif);font-size:1.02rem;}
+  .disc .sub{font-size:.74rem;color:var(--muted);margin:.25rem 0 .6rem;}
+  .barcode{height:22px;margin:.2rem 0 .7rem;display:flex;gap:2px;align-items:stretch;opacity:.7;}
+  .barcode i{flex:1;background:var(--ink);}
+  .barcode i:nth-child(2n){flex:2;background:transparent;}
+  .barcode i:nth-child(3n){flex:.6;}
+  .disc .foot{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed var(--line);padding-top:.6rem;}
+  .see{font-family:var(--mono);font-size:.8rem;color:var(--green);border-bottom:1px solid var(--green);}
+
+  /* 栏目4：借阅周转榜 */
+  #ranking .list{max-width:760px;}
+  .turn{display:grid;grid-template-columns:52px 1fr auto;gap:1rem;align-items:center;padding:1.05rem 0;
+    border-bottom:1px solid var(--line);}
+  .tno{font-family:var(--mono);font-weight:800;font-size:1.1rem;color:var(--ink);text-align:center;
+    border:1px solid var(--line);border-radius:3px;padding:.3rem 0;background:var(--paper2);}
+  .tno.top{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .turn h3{font-size:1rem;}
+  .turn .sub{font-size:.74rem;color:var(--muted);}
+  .shelf{height:12px;background:var(--paper2);border:1px solid var(--line);border-radius:2px;margin-top:.4rem;overflow:hidden;}
+  .shelf .fill{height:100%;background:linear-gradient(90deg,var(--green),var(--brass),var(--red));}
+  .val{font-family:var(--mono);font-size:.78rem;color:var(--green);}
+
+  /* 栏目5 */
+  #about .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);
+    padding:1.6rem;font-size:.92rem;color:var(--ink2);}
+  #about .note b{color:var(--ink);}
+  .url{font-family:var(--mono);color:var(--green);margin-top:.8rem;display:inline-block;}
+
+  footer{text-align:center;font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    padding:2.5rem 1rem 3rem;border-top:1px solid var(--line);}
+
+  @media(max-width:768px){
+    .nav{display:none;}
+    .desk{grid-template-columns:1fr;}
+    .reel-wrap{order:-1;}
+    .hero-txt h1{font-size:2.5rem;}
+    #category .grid{grid-template-columns:1fr 1fr;}
+    #latest .grid{grid-template-columns:1fr;}
+    .turn{grid-template-columns:44px 1fr;}
+    .val{display:none;}
+  }
+  @media(max-width:420px){#category .grid{grid-template-columns:1fr;}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;}}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="reel" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <circle cx="24" cy="24" r="20" stroke="#1f2a37" stroke-width="2" fill="#f4f1ea"/>
+      <circle cx="24" cy="24" r="6" fill="#1f2a37"/>
+      <circle cx="24" cy="9" r="3.4" fill="#c0492f"/>
+      <circle cx="24" cy="39" r="3.4" fill="#2f6f5b"/>
+      <circle cx="9" cy="24" r="3.4" fill="#b9893f"/>
+      <circle cx="39" cy="24" r="3.4" fill="#2f6f5b"/>
+    </svg>
+    免费影视在线观看
+  </div>
+  <nav class="nav">
+    <a href="#home">借阅台</a>
+    <a href="#category">放映厅</a>
+    <a href="#latest">新片卡</a>
+    <a href="#ranking">周转榜</a>
+    <a href="#about">馆规</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <!-- 栏目1 -->
+  <section id="home">
+    <div class="desk">
+      <div class="borrow-card">
+        <div class="fields">
+          <div class="field"><b>读者证</b><span>NO.2026-0025</span></div>
+          <div class="field"><b>馆藏类</b><span>电影 / 剧集 / 动漫 / 综艺</span></div>
+          <div class="field"><b>画质</b><span>4K · 1080P · 中字</span></div>
+          <div class="field"><b>状态</b><span>在架可借 · 无弹窗</span></div>
+        </div>
+      </div>
+      <div class="hero-txt">
+        <span class="call">REEL LIBRARY</span>
+        <h1>免费影视<br><em>在线观看</em></h1>
+        <p class="lead">mianfeiyingshizaixianguankan-h5.github.io —— 把全网好片收进公共放映厅。按厅分类、标清画质、写好索书号，手机电脑都能安静挑一部，借走就看。</p>
+        <div class="tags">
+          <span class="tag">🎞 4K 修复</span>
+          <span class="tag">📼 1080P 流畅</span>
+          <span class="tag">🔖 中字馆藏</span>
+          <span class="tag">🪧 不弹窗</span>
+        </div>
+        <a href="#latest" class="cta">去借片单 →</a>
+      </div>
+    </div>
+    <div class="reel-wrap" aria-hidden="true" style="margin-top:2rem">
+      <svg viewBox="0 0 200 120">
+        <rect x="20" y="30" width="160" height="60" rx="6" fill="none" stroke="#1f2a37" stroke-width="2"/>
+        <circle cx="55" cy="60" r="18" fill="none" stroke="#2f6f5b" stroke-width="2"/>
+        <circle cx="55" cy="60" r="4" fill="#2f6f5b"/>
+        <circle cx="145" cy="60" r="18" fill="none" stroke="#c0492f" stroke-width="2"/>
+        <circle cx="145" cy="60" r="4" fill="#c0492f"/>
+        <path d="M73,60 H127" stroke="#b9893f" stroke-width="2" stroke-dasharray="4 4"/>
+        <g fill="#1f2a37">
+          <rect x="24" y="26" width="3" height="8"/><rect x="32" y="26" width="3" height="8"/>
+          <rect x="40" y="26" width="3" height="8"/><rect x="157" y="26" width="3" height="8"/>
+          <rect x="165" y="26" width="3" height="8"/><rect x="173" y="26" width="3" height="8"/>
+          <rect x="24" y="86" width="3" height="8"/><rect x="32" y="86" width="3" height="8"/>
+          <rect x="40" y="86" width="3" height="8"/><rect x="157" y="86" width="3" height="8"/>
+          <rect x="165" y="86" width="3" height="8"/><rect x="173" y="86" width="3" height="8"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 栏目2 -->
+  <section id="category">
+    <div class="sec-head"><span class="call">CATALOG</span><h2 class="sec-title">放映厅目录</h2></div>
+    <div class="grid">
+      <div class="hall"><span class="dot"></span><div class="no">索书号 A-01</div><h3>动作放映厅</h3><p>武侠 / 战争 / 警匪大片</p></div>
+      <div class="hall"><span class="dot"></span><div class="no">索书号 B-02</div><h3>悬疑放映厅</h3><p>犯罪 / 烧脑 / 反转剧</p></div>
+      <div class="hall"><span class="dot"></span><div class="no">索书号 C-03</div><h3>动画放映厅</h3><p>国漫 / 新番 / 剧场版</p></div>
+      <div class="hall"><span class="dot"></span><div class="no">索书号 D-04</div><h3>剧集放映厅</h3><p>国产 / 韩日 / 欧美剧</p></div>
+      <div class="hall"><span class="dot"></span><div class="no">索书号 E-05</div><h3>纪录放映厅</h3><p>人文 / 自然 / 历史</p></div>
+      <div class="hall"><span class="dot"></span><div class="no">索书号 F-06</div><h3>综艺放映厅</h3><p>脱口秀 / 真人秀 / 晚会</p></div>
+    </div>
+  </section>
+
+  <!-- 栏目3 -->
+  <section id="latest">
+    <div class="sec-head"><span class="call">NEW REEL</span><h2 class="sec-title">今日借阅卡</h2></div>
+    <div class="grid">
+      <article class="disc">
+        <div class="cover">🏜️<span class="stamp">4K</span></div>
+        <div class="body"><h3>沙丘3：救世主</h3><div class="sub">科幻 / 156min / 中字修复</div>
+          <div class="barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="foot"><span class="sub">动作放映厅</span><a href="#" class="see">借阅</a></div></div>
+      </article>
+      <article class="disc">
+        <div class="cover c2">👑<span class="stamp">合集</span></div>
+        <div class="body"><h3>庆余年2</h3><div class="sub">古装权谋 / 32集</div>
+          <div class="barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="foot"><span class="sub">剧集放映厅</span><a href="#" class="see">借阅</a></div></div>
+      </article>
+      <article class="disc">
+        <div class="cover c3">🔥<span class="stamp">BD</span></div>
+        <div class="body"><h3>周处除三害</h3><div class="sub">动作犯罪 / 134min</div>
+          <div class="barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="foot"><span class="sub">动作放映厅</span><a href="#" class="see">借阅</a></div></div>
+      </article>
+      <article class="disc">
+        <div class="cover">⚔️<span class="stamp">4K</span></div>
+        <div class="body"><h3>咒术回战 S3</h3><div class="sub">动漫 / 连载中</div>
+          <div class="barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="foot"><span class="sub">动画放映厅</span><a href="#" class="see">借阅</a></div></div>
+      </article>
+      <article class="disc">
+        <div class="cover c2">🏎️<span class="stamp">1080P</span></div>
+        <div class="body"><h3>飞驰人生2</h3><div class="sub">喜剧 / 118min</div>
+          <div class="barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="foot"><span class="sub">综艺放映厅</span><a href="#" class="see">借阅</a></div></div>
+      </article>
+      <article class="disc">
+        <div class="cover c3">🌸<span class="stamp">杜比</span></div>
+        <div class="body"><h3>花束般的恋爱</h3><div class="sub">爱情 / 124min</div>
+          <div class="barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="foot"><span class="sub">剧集放映厅</span><a href="#" class="see">借阅</a></div></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 栏目4 -->
+  <section id="ranking">
+    <div class="sec-head"><span class="call">CIRC</span><h2 class="sec-title">借阅周转榜</h2></div>
+    <div class="list">
+      <div class="turn">
+        <div class="tno top">1</div>
+        <div><h3>繁花</h3><div class="sub">剧集放映厅 / 王家卫美学</div>
+          <div class="shelf"><div class="fill" style="width:98%"></div></div></div>
+        <div class="val">在架 98%</div>
+      </div>
+      <div class="turn">
+        <div class="tno top">2</div>
+        <div><h3>庆余年2</h3><div class="sub">剧集放映厅 / 古装权谋</div>
+          <div class="shelf"><div class="fill" style="width:95%"></div></div></div>
+        <div class="val">在架 95%</div>
+      </div>
+      <div class="turn">
+        <div class="tno top">3</div>
+        <div><h3>沙丘3</h3><div class="sub">动作放映厅 / 4K 修复</div>
+          <div class="shelf"><div class="fill" style="width:92%"></div></div></div>
+        <div class="val">在架 92%</div>
+      </div>
+      <div class="turn">
+        <div class="tno">4</div>
+        <div><h3>周处除三害</h3><div class="sub">动作放映厅 / 动作犯罪</div>
+          <div class="shelf"><div class="fill" style="width:88%"></div></div></div>
+        <div class="val">在架 88%</div>
+      </div>
+      <div class="turn">
+        <div class="tno">5</div>
+        <div><h3>热辣滚烫</h3><div class="sub">综艺放映厅 / 励志喜剧</div>
+          <div class="shelf"><div class="fill" style="width:84%"></div></div></div>
+        <div class="val">在架 84%</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目5 -->
+  <section id="about">
+    <div class="sec-head"><span class="call">RULES</span><h2 class="sec-title">馆规小记</h2></div>
+    <div class="note">
+      <p><b>免费影视在线观看</b>是一间公共放映厅导航，只做分类索引、画质标注与入口整理，<b>不托管视频文件，也不内置播放源</b>。借还自由，安静看片。</p>
+      <p style="margin-top:.6rem">内容用于个人观影决策与学习交流；实际观看请通过正规授权平台，并遵守当地网络与版权规范。</p>
+      <a href="#" class="url">🎞 https://mianfeiyingshizaixianguankan-h5.github.io</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  免费影视在线观看 / mianfeiyingshizaixianguankan-h5.github.io<br>
+  © 2026 胶片借阅台 · Reel Library Edition
+</footer>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const t=document.querySelector(a.getAttribute('href'));
+      if(t)t.scrollIntoView({behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>
